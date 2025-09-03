@@ -8,8 +8,6 @@ Here's what the app looks like when it's running:
 
 ![A screenshot of the Movie Recommender System in action, showing the search bar and a grid of recommended movie posters.](assets/screenshot-app.png)
 
----
-
 ## 💡 How It Works
 
 Our system is powered by a **hybrid recommendation model**, which is a fancy way of saying it combines two different methods to give you the best suggestions:
@@ -19,7 +17,12 @@ Our system is powered by a **hybrid recommendation model**, which is a fancy way
 
 When you type a movie title, our system is smart enough to handle typos or different spellings (like "ironman" vs. "Iron Man"). It finds the closest match and gives you fast recommendations with a cool grid of movie posters.
 
----
+## 📂 Data Sources
+
+The datasets used to build and train this recommendation system are publicly available and can be found in the `data/` directory of this repository.
+
+- **[TMDB 5000 Movie Dataset](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)**: This dataset provides detailed information about movies, including genres, keywords, cast, and crew. It's the primary source for the content-based filtering part of our model.
+- **[The Movies Dataset](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset)**: This dataset contains movie ratings provided by users. We use it to train the collaborative filtering part of our model, which helps us understand user preferences.
 
 ## 🚀 Getting Started
 
@@ -30,26 +33,11 @@ Follow these simple steps to get this project up and running on your computer.
 First, you need to get a copy of the project. Open your terminal or command prompt and run this command:
 
 ```sh
-git clone <your-repo-url>
+git clone https://github.com/lskeey/movie-recommendation-system.git
 cd movie-recommendation-system
 ```
 
-### Step 2: Set Up Your Environment
-
-It's best practice to use a virtual environment to keep your project's dependencies separate.
-
-```sh
-# Create a virtual environment
-python -m venv venv
-
-# Activate it
-# For Windows:
-venv\Scripts\activate
-# For macOS/Linux:
-source venv/bin/activate
-```
-
-### Step 3: Install Required Libraries
+### Step 2: Install Required Libraries
 
 Install all the necessary tools and libraries the project needs.
 
@@ -57,7 +45,7 @@ Install all the necessary tools and libraries the project needs.
 pip install -r requirements.txt
 ```
 
-### Step 4: Get a TMDB API Key
+### Step 3: Get a TMDB API Key
 
 Our app needs a key to get movie posters.
 
@@ -71,11 +59,9 @@ Add your key to this file like this:
 TMDB_API_KEY="your_api_key_here"
 ```
 
-### Step 5: Train the Model
+### Step 4: Train the Model
 
 Run the `hybrid_filtering.ipynb` in the `notebooks/` directory to train the collaborative and content-based filtering models and generate the `recommender_models.pkl` file in the `models/` directory.
-
----
 
 ## ▶️ Running the App
 
