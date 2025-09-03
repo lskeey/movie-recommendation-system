@@ -3,6 +3,7 @@ import requests
 import os
 import sys
 from dotenv import load_dotenv
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Add the project root to the system path to allow importing from src
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -46,6 +47,8 @@ def fetch_poster(movie_id):
         st.error(f"Error fetching poster: {e}")
         return None
 
+st.set_page_config(layout="centered")
+
 st.header('Movie Recommender System')
 
 # Load the recommender model using the cached function
@@ -68,16 +71,27 @@ if st.button('Show Recommendation'):
         if recommended_movies:
             st.subheader("Recommended Movies:")
             
-            # Create a 3-column grid
+            # Use ThreadPoolExecutor to fetch posters concurrently
+            posters = {}
+            with ThreadPoolExecutor(max_workers=9) as executor:
+                future_to_movie = {executor.submit(fetch_poster, movie['tmdbId']): movie for movie in recommended_movies}
+                for future in as_completed(future_to_movie):
+                    movie = future_to_movie[future]
+                    try:
+                        poster_url = future.result()
+                        posters[movie['tmdbId']] = poster_url
+                    except Exception as exc:
+                        st.error(f"Movie {movie.get('title', 'N/A')} generated an exception: {exc}")
+
+            # Create a 3-column grid and display posters from the dictionary
             cols = st.columns(3)
             for i, movie in enumerate(recommended_movies):
-                with cols[i % 3]: # Use modulo to cycle through columns
-                    poster = fetch_poster(movie['tmdbId'])
+                with cols[i % 3]:
+                    poster = posters.get(movie['tmdbId'])
                     if poster:
-                        st.image(poster)
+                        st.image(poster, width='stretch', caption=movie.get('title', ''))
                     else:
                         st.text("No poster available")
-            
         else:
             st.warning(f"No recommendations found for '{selected_movie}'. Please try a different movie title.")
     else:
