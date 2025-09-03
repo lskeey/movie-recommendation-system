@@ -21,7 +21,9 @@ def load_and_preprocess_data():
 
     # Merge movie data
     tmdb_credits_df.columns = ['id', 'title', 'cast', 'crew']
-    tmdb_movies_df = tmdb_movies_df.merge(tmdb_credits_df, on='id')
+    
+    # Drop the redundant 'title' column from tmdb_credits_df before merging
+    tmdb_movies_df = tmdb_movies_df.merge(tmdb_credits_df.drop('title', axis=1), on='id')
     tmdb_movies_df = tmdb_movies_df.rename(columns={'id': 'tmdbId'})
 
     # Link ratings with TMDB IDs and filter
