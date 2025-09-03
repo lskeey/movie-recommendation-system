@@ -1,2 +1,5 @@
 __pycache__
 .env
+*.pkl
+links.csv
+ratings.csv
