@@ -14,7 +14,7 @@ def hybrid_recommender(movie_title, n, w_content, w_collaborative, models):
         models: Dictionary containing all necessary models and dataframes
         
     Returns:
-        List of recommended movie titles sorted by hybrid score
+        List of recommended movie dictionaries sorted by hybrid score
     """
     # Extract models and data
     content_cosine_sim = models['content_cosine_sim']
@@ -51,4 +51,9 @@ def hybrid_recommender(movie_title, n, w_content, w_collaborative, models):
     # Sort by hybrid score
     sorted_recs = sorted(hybrid_scores.items(), key=lambda x: x[1], reverse=True)
 
-    return [title for title, score in sorted_recs][:n]
+    # Get details for the top N recommended movies
+    recommended_titles = [title for title, score in sorted_recs][:n]
+    recommended_movies_df = tmdb_movies_df[tmdb_movies_df['title_x'].isin(recommended_titles)]
+    
+    # Return a list of movie dictionaries, including 'tmdbId'
+    return recommended_movies_df[['tmdbId', 'title_x']].to_dict('records')

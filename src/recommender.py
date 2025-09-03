@@ -14,7 +14,7 @@ class Recommender:
             models = pickle.load(file)
         return models
 
-    def get_recommendations(self, movie_title, n=15, w_content=0.5, w_collaborative=0.5):
+    def get_recommendations(self, movie_title, n=6, w_content=0.5, w_collaborative=0.5):
         """
         Gets movie recommendations using the hybrid model.
         """
